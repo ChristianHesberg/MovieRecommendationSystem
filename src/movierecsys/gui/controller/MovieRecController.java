@@ -45,4 +45,9 @@ public class MovieRecController implements Initializable
         lstMovies.setItems(moviesModel.getAllMovies());
     }
 
+    public void search()
+    {
+        lstMovies.setItems(moviesModel.searchResults(txtMovieSearcjh.getText()));
+    }
+
 }

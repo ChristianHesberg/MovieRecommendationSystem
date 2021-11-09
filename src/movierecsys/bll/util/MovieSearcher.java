@@ -5,8 +5,15 @@
  */
 package movierecsys.bll.util;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import movierecsys.be.Movie;
+import movierecsys.dal.MovieDAO;
 
 /**
  *
@@ -14,10 +21,31 @@ import movierecsys.be.Movie;
  */
 public class MovieSearcher
 {
-    public List<Movie> search(List<Movie> searchBase, String query)
+
+    private MovieDAO movieData;
+
+    public MovieSearcher()
     {
-        //TODO Movie search
-        return null;
+        movieData = new MovieDAO();
+    }
+
+    public ObservableList<Movie> search(List<Movie> searchBase, String query)
+    {
+        ObservableList<Movie> searchResults = FXCollections.observableArrayList();
+        try {
+            searchBase = movieData.getAllMovies();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (Movie m : searchBase)
+        {
+            if (m.getTitle().toLowerCase().contains(query.toLowerCase()))
+            {
+                searchResults.add(m);
+            }
+        }
+        return searchResults;
     }
     
 }
