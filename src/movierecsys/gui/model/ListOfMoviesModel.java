@@ -2,7 +2,9 @@ package movierecsys.gui.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
 import movierecsys.be.Movie;
+import movierecsys.bll.MovieManager;
 import movierecsys.bll.OwsLogicFacade;
 import movierecsys.bll.util.MovieSearcher;
 import movierecsys.dal.MovieDAO;
@@ -15,19 +17,11 @@ public class ListOfMoviesModel
 
     private ObservableList<Movie> allMovies;
     private OwsLogicFacade logicFacade;
-    private MovieDAO movieData;
-    private MovieSearcher movieSearcher;
+    private MovieManager movieManager;
 
     public ListOfMoviesModel()
     {
-        allMovies = FXCollections.observableArrayList();
-        movieData = new MovieDAO();
-        movieSearcher = new MovieSearcher();
-        try {
-            allMovies.addAll(movieData.getAllMovies());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public ObservableList<Movie> getAllMovies() {
@@ -36,12 +30,8 @@ public class ListOfMoviesModel
 
     public ObservableList<Movie> searchResults(String input)
     {
-        try {
-            return movieSearcher.search(movieData.getAllMovies(), input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return FXCollections.observableArrayList(movieManager.searchMovies(input));
     }
+
 
 }

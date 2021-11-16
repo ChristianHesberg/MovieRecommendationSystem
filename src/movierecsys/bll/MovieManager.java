@@ -1,16 +1,20 @@
 package movierecsys.bll;
 
+import javafx.collections.FXCollections;
 import movierecsys.be.Movie;
 import movierecsys.be.Rating;
 import movierecsys.be.User;
 import movierecsys.bll.util.MovieSearcher;
+import movierecsys.dal.MovieDAO;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MovieManager implements OwsLogicFacade
 {
 
     private MovieSearcher movieSearcher;
+    private MovieDAO movieData;
 
     public MovieManager()
     {
@@ -34,7 +38,13 @@ public class MovieManager implements OwsLogicFacade
 
     @Override
     public List<Movie> searchMovies(String query) {
-        return null;
+        List<Movie> movieList = null;
+        try {
+            movieList = movieSearcher.search(movieData.getAllMovies(), query);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return movieList;
     }
 
     @Override

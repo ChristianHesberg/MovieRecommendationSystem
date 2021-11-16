@@ -5,11 +5,7 @@
  */
 package movierecsys.dal;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,8 +74,22 @@ public class MovieDAO {
      * storage.
      */
     private Movie createMovie(int releaseYear, String title) {
-        //TODO Create movie.
-        return null;
+        /*try (FileWriter writer = new FileWriter(MOVIE_SOURCE, true);
+            BufferedWriter bw = new BufferedWriter(writer))
+        {
+            bw.write(releaseYear + " , " + title);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+         */
+        try {
+            List<Movie> allMovies = getAllMovies();
+            allMovies.add(new Movie())
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

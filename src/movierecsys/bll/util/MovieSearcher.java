@@ -29,9 +29,9 @@ public class MovieSearcher
         movieData = new MovieDAO();
     }
 
-    public ObservableList<Movie> search(List<Movie> searchBase, String query)
+    public List<Movie> search(List<Movie> searchBase, String query)
     {
-        ObservableList<Movie> searchResults = FXCollections.observableArrayList();
+        List<Movie> searchResults = new ArrayList<>();
         try {
             searchBase = movieData.getAllMovies();
         } catch (IOException e) {
