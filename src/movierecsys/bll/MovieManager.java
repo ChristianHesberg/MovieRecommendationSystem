@@ -18,7 +18,12 @@ public class MovieManager implements OwsLogicFacade
 
     public MovieManager()
     {
-        movieSearcher = new MovieSearcher();
+        this.movieSearcher = new MovieSearcher();
+        this.movieData = new MovieDAO();
+    }
+
+    public List<Movie> getMovieList() throws IOException {
+        return movieData.getAllMovies();
     }
 
     @Override
@@ -49,17 +54,18 @@ public class MovieManager implements OwsLogicFacade
 
     @Override
     public Movie createMovie(int year, String title) {
-        return null;
+        return movieData.createMovie(year, title);
     }
 
     @Override
     public void updateMovie(Movie movie) {
+        movieData.updateMovie(movie);
 
     }
 
     @Override
     public void deleteMovie(Movie movie) {
-
+        movieData.deleteMovie(movie);
     }
 
     @Override

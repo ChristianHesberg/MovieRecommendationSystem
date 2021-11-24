@@ -10,6 +10,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import movierecsys.be.Movie;
+import movierecsys.be.Rating;
+import movierecsys.be.User;
+import movierecsys.dal.MovieDAO;
+import movierecsys.dal.RatingDAO;
+import movierecsys.dal.UserDAO;
 
 /**
  *
@@ -21,10 +27,20 @@ public final class OwsMain extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-        Parent root = FXMLLoader.load(getClass().getResource("/movierecsys/gui/view/MovieRecView.fxml"));
+
+        /*UserDAO test = new UserDAO();
+        System.out.println(test.getUser(7));
+
+         */
+        RatingDAO test = new RatingDAO();
+        System.out.println(test.getAllRatings());
+
+        /*Parent root = FXMLLoader.load(getClass().getResource("/movierecsys/gui/view/MovieRecView.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+         */
     }
 
     /**

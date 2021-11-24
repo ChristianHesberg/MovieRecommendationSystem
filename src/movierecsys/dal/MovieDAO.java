@@ -8,6 +8,7 @@ package movierecsys.dal;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import movierecsys.be.Movie;
 
@@ -73,23 +74,28 @@ public class MovieDAO {
      * @return The object representation of the movie added to the persistence
      * storage.
      */
-    private Movie createMovie(int releaseYear, String title) {
-        /*try (FileWriter writer = new FileWriter(MOVIE_SOURCE, true);
+    public Movie createMovie(int releaseYear, String title) {
+        try (FileWriter writer = new FileWriter(MOVIE_SOURCE, true);
             BufferedWriter bw = new BufferedWriter(writer))
         {
-            bw.write(releaseYear + " , " + title);
+            int biggest = 0;
+            int newID = 0;
+            for(Movie movie : getAllMovies())
+            {
+                if (movie.getId() > biggest)
+                {
+                    biggest = movie.getId();
+                    newID = biggest + 1;
+                }
+            }
+            Movie movieToAdd = new Movie(newID, releaseYear, title);
+            bw.write("\r\n" + newID + "," + releaseYear + "," + title);
+            return movieToAdd;
         }
         catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-         */
-        try {
-            List<Movie> allMovies = getAllMovies();
-            allMovies.add(new Movie())
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     /**
@@ -97,9 +103,34 @@ public class MovieDAO {
      *
      * @param movie The movie to delete.
      */
-    private void deleteMovie(Movie movie) {
-        //TODO Delete movie
+    public void deleteMovie(Movie movie) {
+
+        String newFileText = "";
+        try (FileReader reader = new FileReader(MOVIE_SOURCE);
+             BufferedReader br = new BufferedReader(reader)) {
+            Scanner scanner = new Scanner(br);
+            while (scanner.hasNextLine()) {
+                String currentLine = scanner.nextLine().trim();
+                String[] lineSplit = currentLine.split(",");
+                int ID = Integer.parseInt(lineSplit[0]);
+                if (ID != movie.getId() && ID == 1) {
+                    newFileText += currentLine;
+                }
+                if (ID != movie.getId())
+                {
+                    newFileText += "\r\n" + currentLine;
+                }
+            }
+            try (FileWriter writer = new FileWriter(MOVIE_SOURCE);
+                 BufferedWriter bw = new BufferedWriter(writer))
+            {
+                bw.write(newFileText);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * Updates the movie in the persistence storage to reflect the values in the
@@ -107,18 +138,61 @@ public class MovieDAO {
      *
      * @param movie The updated movie.
      */
-    private void updateMovie(Movie movie) {
-        //TODO Update movies
-    }
+    public void updateMovie(Movie movie) {
 
-    /**
+        String newFileText = "";
+        try (FileReader reader = new FileReader(MOVIE_SOURCE);
+             BufferedReader br = new BufferedReader(reader)) {
+            Scanner scanner = new Scanner(br);
+            while (scanner.hasNextLine()) {
+                String currentLine = scanner.nextLine().trim();
+                String[] lineSplit = currentLine.split(",");
+                int ID = Integer.parseInt(lineSplit[0].trim());
+                if (ID != movie.getId()) {
+                    newFileText += currentLine + "\r\n";
+                }
+                if (ID == movie.getId())
+                {
+                    newFileText += movie.getId() + "," + movie.getYear() + "," + movie.getTitle();
+                }
+            }
+            try (FileWriter writer = new FileWriter(MOVIE_SOURCE);
+                 BufferedWriter bw = new BufferedWriter(writer))
+            {
+                bw.write(newFileText);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        }
+
+        /**
      * Gets a the movie with the given ID.
      *
      * @param id ID of the movie.
      * @return A Movie object.
      */
-    private Movie getMovie(int id) {
-        //TODO Get one Movie
+    public Movie getMovie(int id) {
+        String newFileText = "";
+        try (FileReader reader = new FileReader(MOVIE_SOURCE);
+             BufferedReader br = new BufferedReader(reader)) {
+            Scanner scanner = new Scanner(br);
+            while (scanner.hasNextLine()) {
+                String currentLine = scanner.nextLine().trim();
+                String[] lineSplit = currentLine.split(",");
+                int ID = Integer.parseInt(lineSplit[0]);
+                if(ID == id)
+                {
+                    int year = Integer.parseInt(lineSplit[1]);
+                    Movie movie = new Movie(ID, year, lineSplit[2]);
+                    return movie;
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
         return null;
     }
 

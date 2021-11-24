@@ -32,15 +32,9 @@ public class MovieSearcher
     public List<Movie> search(List<Movie> searchBase, String query)
     {
         List<Movie> searchResults = new ArrayList<>();
-        try {
-            searchBase = movieData.getAllMovies();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         for (Movie m : searchBase)
         {
-            if (m.getTitle().toLowerCase().contains(query.toLowerCase()))
+            if (m.getTitle().toLowerCase().contains(query.toLowerCase().trim()))
             {
                 searchResults.add(m);
             }
