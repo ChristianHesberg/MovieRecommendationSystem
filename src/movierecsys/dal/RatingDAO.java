@@ -6,6 +6,8 @@
 package movierecsys.dal;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -96,6 +98,24 @@ public class RatingDAO
     public List<Rating> getAllRatings()
     {
         List<Rating> allRatings = new ArrayList<>();
+        try {
+            List<String> ratingList = Files.readAllLines(Path.of(RATING_SOURCE));
+            for (String line : ratingList)
+            {
+                String[] values = line.split(",");
+
+                int movieID = Integer.parseInt(values[0]);
+                int userID = Integer.parseInt(values[1]);
+                int rating = Integer.parseInt(values[2]);
+
+                Rating newRating = new Rating(movieData.getMovie(movieID), userData.getUser(userID), rating);
+                allRatings.add(newRating);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return allRatings;
+        /*List<Rating> allRatings = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(RATING_SOURCE)))
         {
             Scanner scanner = new Scanner(br);
@@ -116,6 +136,8 @@ public class RatingDAO
             e.printStackTrace();
         }
         return allRatings;
+
+         */
     }
     
     /**
